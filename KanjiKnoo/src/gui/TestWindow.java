@@ -48,8 +48,6 @@ public class TestWindow extends DictionaryAware implements AnswerChoosenEventLis
 	protected TestWindow() {
 		super();
 		
-		Settings.getAppDatasPath();
-		
 		if(UserManager.getUser() == null) {
 			SelectUser selectUser = new SelectUser(frame);
 			UserManager.setUser(selectUser.getSelectedUser());
