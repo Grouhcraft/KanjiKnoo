@@ -1,4 +1,4 @@
-package gui;
+package quizz;
 
 public class AnswerChoosenEvent extends java.util.EventObject {
 	/**

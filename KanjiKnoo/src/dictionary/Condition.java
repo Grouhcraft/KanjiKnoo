@@ -1,4 +1,4 @@
-package core;
+package dictionary;
 
 final public class Condition {
 

@@ -1,9 +1,5 @@
 package core;
 
-import gui.Logger;
-import gui.MessageBox;
-import gui.QuestionMessageBox;
-import gui.QuestionMessageBox.ButtonTypes;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +10,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Scanner;
+
+import tools.Logger;
+import tools.MessageBox;
+import tools.QuestionMessageBox;
+import tools.QuestionMessageBox.ButtonTypes;
+import users.UserManager;
 
 public class Settings {
 

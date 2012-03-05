@@ -1,4 +1,4 @@
-package core;
+package quizz;
 
 /**
  * The different types of kanji Quiz

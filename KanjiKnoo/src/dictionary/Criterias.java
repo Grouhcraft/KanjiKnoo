@@ -1,4 +1,6 @@
-package core;
+package dictionary;
+
+
 /**
  * Criterias used by {@link #Condition}
  * @see Dictionary#queryKanjis(Condition)

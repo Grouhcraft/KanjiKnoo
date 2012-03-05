@@ -1,4 +1,4 @@
-package misc;
+package tools;
 
 public class Pair<L, R> {
 

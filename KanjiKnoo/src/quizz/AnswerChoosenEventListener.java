@@ -1,4 +1,4 @@
-package gui;
+package quizz;
 
 import java.util.EventObject;
 

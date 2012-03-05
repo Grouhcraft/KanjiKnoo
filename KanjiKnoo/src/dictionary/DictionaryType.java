@@ -1,4 +1,4 @@
-package core;
+package dictionary;
 /**
  * Types of dictionaries used for Kanji entries 
  * and kanjis radicals entries.<br/>

@@ -1,4 +1,4 @@
-package gui;
+package quizz;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

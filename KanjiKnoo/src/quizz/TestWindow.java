@@ -1,4 +1,5 @@
-package gui;
+package quizz;
+
 
 import javax.swing.JFrame;
 import javax.swing.GroupLayout;
@@ -21,21 +22,21 @@ import java.util.Map.Entry;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
-import core.Condition;
-import core.Criterias;
-import core.Dictionary;
-import core.DictionaryAware;
+import tools.Logger;
+import users.UserManager;
+
 import core.InfoType;
 import core.Kanji;
 import core.Settings;
-import core.UserManager;
-
+import dictionary.Condition;
+import dictionary.Criterias;
+import dictionary.Dictionary;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class TestWindow extends DictionaryAware implements AnswerChoosenEventListener {	
+public class TestWindow implements AnswerChoosenEventListener {	
 	private JLabel lastKanjiLabel;
 	private JLabel lastMeaningLabel;
 	private JLabel lastReadingLabel;
@@ -45,7 +46,7 @@ public class TestWindow extends DictionaryAware implements AnswerChoosenEventLis
 	private HashMap<InfoType, JLabel> proposedLabels = new HashMap<InfoType, JLabel>();
 	
 	
-	protected TestWindow() {
+	public TestWindow() {
 		super();
 		
 		if(UserManager.getUser() == null) {
@@ -62,7 +63,6 @@ public class TestWindow extends DictionaryAware implements AnswerChoosenEventLis
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	@Override
 	protected void initialize() {
 		Logger.log((Settings.UsePondaration ? "using" : "not using") + " pondarated random");
 		
@@ -227,7 +227,6 @@ public class TestWindow extends DictionaryAware implements AnswerChoosenEventLis
 		frame.getContentPane().setLayout(groupLayout);
 	}
 	
-	@Override
 	protected JLabel getKanjiLabel() {
 		return proposedLabels.get(InfoType.KANJI);
 	}
@@ -255,7 +254,6 @@ public class TestWindow extends DictionaryAware implements AnswerChoosenEventLis
 		}
 	}
 	
-	@Override
 	protected void update() {
 		proposedLabels.get(InfoType.KANJI).setText(kanjiToGuess.toString());
 		proposedLabels.get(InfoType.MEANING).setText(kanjiToGuess.getJoinedMeanings(", "));

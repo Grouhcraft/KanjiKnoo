@@ -1,6 +1,5 @@
 package core;
 
-import gui.Logger;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,6 +12,10 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import tools.Logger;
+
+import dictionary.DictionaryFilesHandler;
 
 public class XMLDictionaryParser {
 	

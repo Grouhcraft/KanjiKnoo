@@ -1,16 +1,10 @@
-package gui;
+package core;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import core.Condition;
-import core.Criterias;
-import core.Dictionary;
-import core.DictionaryAware;
-import core.Kanji;
-import core.Settings;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -23,7 +17,15 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
 
-public class MainWindow extends DictionaryAware {
+import quizz.SettingsWindow;
+import quizz.TestWindow;
+import tools.Logger;
+
+import dictionary.Condition;
+import dictionary.Criterias;
+import dictionary.Dictionary;
+
+public class MainWindow {
 	protected JFrame frame;	
 	private JLabel kanjiLabel;
 	private JLabel meaningsLabel;
@@ -65,12 +67,11 @@ public class MainWindow extends DictionaryAware {
 	/**
 	 * Update GUI with current Kanji
 	 */
-	@Override
 	public void update() {
-		updateKanjiLabel();
+		kanjiLabel.setText(dict().current().getLiteral());
 		meaningsLabel.setText(dict().current().getJoinedMeanings(", "));
-		kunReadingLabel.setText("「" + dict().current().getJoinedKunReadings("、 ") + "」");
-		onReadingLabel.setText("「" + dict().current().getJoinedOnReadings("、 ") + "」");
+		kunReadingLabel.setText("「" + dict().current().getJoinedKunReadings("�? ") + "�?");
+		onReadingLabel.setText("「" + dict().current().getJoinedOnReadings("�? ") + "�?");
 		Logger.log("ucs: " + dict().current().getUcs());
 		Logger.log("JLPT Level: " + dict().current().getJlpt());
 	}
@@ -78,7 +79,6 @@ public class MainWindow extends DictionaryAware {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	@Override
 	protected void initialize() {	
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 371);
@@ -235,7 +235,6 @@ public class MainWindow extends DictionaryAware {
 		frame.getContentPane().setLayout(groupLayout);
 	}
 
-	@Override
 	protected JLabel getKanjiLabel() {
 		return kanjiLabel;
 	}

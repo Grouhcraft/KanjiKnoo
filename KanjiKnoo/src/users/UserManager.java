@@ -1,11 +1,15 @@
-package core;
+package users;
 
-import gui.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import tools.Logger;
+
+import core.M;
+import core.Settings;
 
 public class UserManager {
 	private static User user = null;

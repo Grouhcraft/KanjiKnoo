@@ -1,8 +1,6 @@
-package core;
+package dictionary;
 
-import gui.Logger;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,14 +9,17 @@ import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import misc.Pair;
+import tools.Logger;
+import tools.Pair;
+
+import core.Kanji;
+import core.XMLDictionaryParser;
+
 
 public class Dictionary {
 	
 	private List<Kanji> kanjis; 
 	private Integer index = 0;
-	@SuppressWarnings("unused")
-	private Connection db = null;
 	private static Dictionary _instance = null;
 	
 	public int getIndex() {
@@ -235,7 +236,7 @@ public class Dictionary {
 			break;
 		case LITERAL:
 			for(int i=0; i<kanjis.size(); i++) {
-				if(kanjis.get(i).getLiteral() == (String)criterias.value) {
+				if(kanjis.get(i).getLiteral().equals((String)criterias.value)) {
 					indexList.add(i);
 				}
 			}

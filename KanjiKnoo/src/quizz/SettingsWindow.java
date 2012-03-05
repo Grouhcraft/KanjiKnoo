@@ -1,4 +1,4 @@
-package gui;
+package quizz;
 
 import javax.swing.JFrame;
 import javax.swing.JCheckBox;

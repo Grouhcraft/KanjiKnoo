@@ -1,6 +1,5 @@
-package core;
+package users;
 
-import gui.Logger;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -8,6 +7,14 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Scanner;
+
+import tools.Logger;
+
+import core.Kanji;
+
+import dictionary.Condition;
+import dictionary.Criterias;
+import dictionary.Dictionary;
 
 /**
  * Using to read, store, access and manage the user stuff, 

@@ -1,8 +1,9 @@
-package core;
+package dictionary;
 
-import gui.Logger;
 
 import java.util.zip.GZIPInputStream;
+
+import tools.Logger;
 
 public class DictionaryFilesHandler {
 	private static DictionaryFilesHandler instance = null;

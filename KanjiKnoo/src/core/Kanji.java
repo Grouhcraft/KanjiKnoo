@@ -3,6 +3,10 @@ package core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import users.UserManager;
+
+import dictionary.DictionaryType;
+
 /**
  * Represents a Kanji with all its informations, like the strokes count, the differents readings, .. 
  * @author knoodrake
@@ -259,7 +263,7 @@ public class Kanji implements Comparable<Kanji> {
 
 	public boolean equals(Object obj) {
 		if(obj instanceof Kanji) {
-			if(((Kanji)obj).getUcs() == getUcs()) {
+			if(((Kanji)obj).getUcs().equals(getUcs())) {
 				return true;
 			}
 		}
