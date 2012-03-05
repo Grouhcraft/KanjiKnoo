@@ -24,6 +24,7 @@ import javax.swing.border.BevelBorder;
 
 import tools.Logger;
 import users.SelectUser;
+import users.User;
 import users.UserManager;
 
 import core.InfoType;
@@ -52,8 +53,13 @@ public class TestWindow implements AnswerChoosenEventListener {
 		
 		if(UserManager.getUser() == null) {
 			SelectUser selectUser = new SelectUser(frame);
-			UserManager.setUser(selectUser.getSelectedUser());
-			Logger.log("user selected: " + UserManager.getUser().getName());
+			User u = selectUser.getSelectedUser();
+			if(u != null) {
+				UserManager.setUser(u);
+				Logger.log("user selected: " + UserManager.getUser().getName());
+			} else {
+				return;
+			}
 		}
 		
 		initialize();		
@@ -286,6 +292,7 @@ public class TestWindow implements AnswerChoosenEventListener {
 			if(ks != null) {				
 				setKanji(ks.get((int)Math.floor( Math.random() * nbOfKanjis )));
 				addAnswers(ks);
+				Logger.log("Weight of the kanji to guess:" + kanjiToGuess.getWeight());
 			} else {
 				Logger.log("No Kanji found");
 			}

@@ -128,20 +128,6 @@ public class User extends Object {
 			return 0.;
 		}
 	}
-	
-	//public abstract void setKanjiWeight(Kanji kanji, double weight);
-	
-	//protected abstract void decreaseWeight(Kanji kanji, double amout);
-	
-	//protected abstract void increaseWeight(Kanji kanji, double amout);
-	
-	//protected void increaseWeight(Kanji kanji) {
-	//	increaseWeight(kanji, wrongAnswerWeight);
-	//}
-	
-	//protected void decreaseWeight(Kanji kanji) {
-	//	decreaseWeight(kanji, goodAnswerWeight);
-	//}
 
 	public String getName() {
 		return name;

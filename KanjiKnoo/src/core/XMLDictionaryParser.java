@@ -81,7 +81,7 @@ public class XMLDictionaryParser {
 									try {
 										kanji.addDictRef(attribute.getValue(), Integer.parseInt(event.asCharacters().getData()));
 									} catch (Exception e) {
-										Logger.log(e.getMessage());
+										//Logger.log(e.getMessage());
 									}
 								}
 							}

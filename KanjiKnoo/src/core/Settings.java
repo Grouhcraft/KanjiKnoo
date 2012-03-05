@@ -69,8 +69,6 @@ public class Settings {
 			e.printStackTrace();
 		}
 		String pathToReturn = null;
-		
-		Logger.log(cwd + M.essage("UserManager.configFileName"));
 		File f = new File(cwd + M.essage("UserManager.configFileName"));
 		if(f.exists()) {
 			try {
@@ -79,8 +77,6 @@ public class Settings {
 				if(scanner.hasNextLine()) {
 					sb.append(scanner.nextLine());
 				}
-				Logger.log("A=" + sb.toString());
-				Logger.log("B=" + sb.toString().split("\\|")[1]);
 				
 				pathToReturn = sb.toString().split("\\|")[1];
 			} catch (FileNotFoundException e) {

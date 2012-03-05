@@ -16,7 +16,6 @@ public class UserManager {
 	
 	public static void createUser(String name) {
 		try {
-			//new File(M.essage("UserManager.usersFilesPath") + name + M.essage("UserManager.usersFilesExtension")).createNewFile();
 			Logger.log(Settings.getAppDatasPath() +  "\\" + name + M.essage("UserManager.usersFilesExtension"));
 			new File(Settings.getAppDatasPath() +  "\\" + name + M.essage("UserManager.usersFilesExtension")).createNewFile();
 			
@@ -24,8 +23,6 @@ public class UserManager {
 			Integer id = (int) (Math.random() * 100000);
 			newUser.setId(id);	
 			newUser.setName(name);
-			
-			//newUser.saveToDisk(M.essage("UserManager.usersFilesPath") + name + M.essage("UserManager.usersFilesExtension"));
 			newUser.saveToDisk(Settings.getAppDatasPath() +  "\\" + name + M.essage("UserManager.usersFilesExtension"));
 			
 		} catch (IOException e) {
@@ -45,8 +42,6 @@ public class UserManager {
 
 	public static List<String> getUsersList() {
 		ArrayList<String> users= new ArrayList<String>();
-		
-		//File folder = new File(M.essage("UserManager.usersFilesPath"));
 		File folder = new File(Settings.getAppDatasPath());
 		
 		if(folder.exists()) { 
@@ -64,7 +59,6 @@ public class UserManager {
 	}
 
 	public static User loadUser(String userName) throws Exception {
-		//return User.readFromDisk(M.essage("UserManager.usersFilesPath") + userName + M.essage("UserManager.usersFilesExtension"));
 		return User.readFromDisk(Settings.getAppDatasPath() + "\\" + userName + M.essage("UserManager.usersFilesExtension"));
 	}
 }
