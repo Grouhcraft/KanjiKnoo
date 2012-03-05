@@ -1,4 +1,4 @@
-package quizz;
+package users;
 
 
 import javax.swing.JPanel;
@@ -25,8 +25,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
 import tools.Logger;
-import users.User;
-import users.UserManager;
 
 public class SelectUser extends JDialog {
 

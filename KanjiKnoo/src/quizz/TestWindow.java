@@ -23,6 +23,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.BevelBorder;
 
 import tools.Logger;
+import users.SelectUser;
 import users.UserManager;
 
 import core.InfoType;
