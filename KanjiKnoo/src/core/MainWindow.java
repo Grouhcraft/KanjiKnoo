@@ -4,12 +4,15 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.GroupLayout;
@@ -37,26 +40,37 @@ public class MainWindow {
 	private JButton btnNewButton;
 	private JButton btnLauchTestWindow;
 	private JButton btnSettings;
+	private static MainWindow _instance = null; 
 	
 	private Dictionary dict() {
 		return Dictionary.getInstance();
+	}
+	
+	public static void initializeDone() {
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+				_instance.frame.setVisible(true);
+				_instance.update();
+		    }
+		});
 	}
 	
 	protected MainWindow() {
 		super();
 		initialize();
 		Settings.initialize();
-		frame.setVisible(true);
+		frame.setVisible(false);
 	}
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {	
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					new MainWindow();
+					Dictionary.getInstance();
+					_instance = new MainWindow();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -231,7 +245,6 @@ public class MainWindow {
 						.addComponent(btnSettings))
 					.addContainerGap())
 		);
-		update();
 		frame.getContentPane().setLayout(groupLayout);
 	}
 

@@ -13,6 +13,7 @@ import tools.Logger;
 import tools.Pair;
 
 import core.Kanji;
+import core.MainWindow;
 import core.XMLDictionaryParser;
 
 
@@ -31,20 +32,18 @@ public class Dictionary {
 	}
 
 	private Dictionary () {
-		DictionaryFilesHandler files = DictionaryFilesHandler.getInstance();
-		XMLDictionaryParser reader = new XMLDictionaryParser();
+		final DictionaryFilesHandler files = DictionaryFilesHandler.getInstance();
+		final XMLDictionaryParser reader = new XMLDictionaryParser();
 		
 		Logger.log("prepare to read dictionary..");
-		kanjis = reader.readDictionary(files);
-		Logger.log("reading finished.");
-		Logger.log("Kanjis readen: " + kanjis.size());
-		
-		try {
-		//	db = DatabaseCreator.createDatabase(kanjis);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				kanjis = reader.readDictionary(files);
+				Logger.log("reading finished.");
+				Logger.log("Kanjis readen: " + kanjis.size());	
+			}
+		}).start();
 	}
 	
 	public int getRandomIndex() {

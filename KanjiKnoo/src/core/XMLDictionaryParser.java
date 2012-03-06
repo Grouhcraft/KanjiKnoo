@@ -1,10 +1,12 @@
 package core;
 
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -16,6 +18,7 @@ import javax.xml.stream.events.XMLEvent;
 import tools.Logger;
 
 import dictionary.DictionaryFilesHandler;
+import dictionary.LoadingDictionaryDialog;
 
 public class XMLDictionaryParser {
 	
@@ -35,20 +38,29 @@ public class XMLDictionaryParser {
 	static final String ATTR_DIC_REF_TYPE = "dr_type";
 	static final String ATTR_RAD_TYPE = "rad_type";
 	static final String RAD_REF = "rad_value";
-
-
+	
+	private LoadingDictionaryDialog loadingDialog = new LoadingDictionaryDialog(12156);
+	
+	private void progress() {
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	loadingDialog.incrementValue();
+		    }
+		});
+	}
+	
 	@SuppressWarnings("unchecked")
-	public List<Kanji> readDictionary(DictionaryFilesHandler fh) {
-		List<Kanji> kanjis = new ArrayList<Kanji>();
+	public List<Kanji> readDictionary(final DictionaryFilesHandler fh) {
+		final List<Kanji> kanjis = new ArrayList<Kanji>();
+		
+	
 		try {
 			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 			XMLEventReader eventReader = inputFactory.createXMLEventReader(fh.getDictionary(), "UTF-8");
 			Kanji kanji = null;
 			
-			Integer i = 0;
-			while(eventReader.hasNext()) {
+			while(eventReader.hasNext()) {				
 				XMLEvent event = eventReader.nextEvent();
-				i++;					
 				
 				if(event.isStartElement()) {
 					StartElement startElement = event.asStartElement();
@@ -199,6 +211,7 @@ public class XMLDictionaryParser {
 					EndElement endElement = event.asEndElement();
 					if (endElement.getName().getLocalPart() == (KANJI)) {
 						kanjis.add(kanji);
+						progress();
 					}
 				}
 			}
@@ -206,6 +219,13 @@ public class XMLDictionaryParser {
 		} catch (XMLStreamException e) {
 			Logger.log("Dictinary warning: " + e.getMessage());
 		}
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		    	loadingDialog.dispose();
+		    	MainWindow.initializeDone();
+		    }
+		});
+
 		return kanjis;
 	}
 }
