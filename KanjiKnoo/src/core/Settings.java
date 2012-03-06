@@ -62,6 +62,7 @@ public class Settings {
 	 */
 	public static String getAppDatasPath() {
 		String cwd = UserManager.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+		cwd = cwd.substring(0, cwd.lastIndexOf("/") + 1 );
 		try {
 			cwd = URLDecoder.decode(cwd, "UTF-8").substring(1);
 		} catch (UnsupportedEncodingException e) {
@@ -91,7 +92,7 @@ public class Settings {
 				System.exit(0);
 			} else {
 				QuestionMessageBox q = new QuestionMessageBox("Please write a path where to store users and stuff", 
-						cwd.replace("/", "\\") + "kanjiknoo_users");
+						cwd.replace("/", "\\") +  "kanjiknoo_users");
 				if(q.buttonPressed == ButtonTypes.OK) {
 					File storeDir = new File(q.getAnswerText());
 					if(!f.exists()) {
