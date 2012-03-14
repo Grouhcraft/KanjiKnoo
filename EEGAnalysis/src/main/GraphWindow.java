@@ -12,20 +12,23 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.image.SampleModel;
 
 public class GraphWindow extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2649145625138349841L;
 	private JPanel contentPane;
 	private int[] channels = {1,2};
 	private int subSampling = 100;
@@ -33,6 +36,13 @@ public class GraphWindow extends JFrame implements ActionListener {
 	private JPlotLayout graphBLayout;
 	private String dataFile = "F:\\BCICIV_1_asc\\BCICIV_eval_ds1a_cnt.txt";
 	private int channelsCount = 59;
+	private int dataFreq = 1000;
+	private int cutOff = 400;
+
+	
+	private final int X = 0;
+	private final int Y = 1;
+	
 
 	/**
 	 * Launch the application.
@@ -56,22 +66,22 @@ public class GraphWindow extends JFrame implements ActionListener {
 	
 	public void updateGraphs(Boolean force) {
 		if(force || !((SGTData)graphALayout.getData().firstElement()).getId().equals(
-				getDataId(dataFile, subSampling, channels[0])) ) {
+				getDataId(dataFile, subSampling, channels[0], cutOff)) ) {
 			graphALayout.setBatch(true);
 			
 			graphALayout.clear();
-			SGTData dataA = readTheData(dataFile, subSampling, channels[0]);
+			SGTData dataA = readTheData(dataFile, subSampling, channels[0], cutOff);
 			graphALayout.addData(dataA);
 			
 			graphALayout.setBatch(false);
 		}
 		
 		if(force || !((SGTData)graphBLayout.getData().firstElement()).getId().equals(
-				getDataId(dataFile, subSampling, channels[1])) ) {
+				getDataId(dataFile, subSampling, channels[1], cutOff)) ) {
 			graphBLayout.setBatch(true);
 			
 			graphBLayout.clear();
-			SGTData dataB = readTheData(dataFile, subSampling, channels[1]);
+			SGTData dataB = readTheData(dataFile, subSampling, channels[1], cutOff);
 			graphBLayout.addData(dataB);
 			
 			graphBLayout.setBatch(false);
@@ -84,7 +94,7 @@ public class GraphWindow extends JFrame implements ActionListener {
 	public GraphWindow() {
 		setTitle("EEG Viewer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 850, 410);
+		setBounds(100, 100, 882, 410);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
@@ -111,64 +121,78 @@ public class GraphWindow extends JFrame implements ActionListener {
 		
 		JButton btnPlus = new JButton("+");
 		JButton btnLess = new JButton("-");
+		JButton btnMoreCutoff = new JButton(">");
+		JButton btnLessCutoff = new JButton("<");
 		btnPlus.setFont(new Font("Tahoma", Font.BOLD, 8));
 		btnLess.setFont(new Font("Tahoma", Font.BOLD, 8));
+		btnMoreCutoff.setFont(new Font("Tahoma", Font.BOLD, 8));
+		btnLessCutoff.setFont(new Font("Tahoma", Font.BOLD, 8));
+		btnMoreCutoff.addActionListener(this);
+		btnLessCutoff.addActionListener(this);
 		btnPlus.addActionListener(this);
 		btnLess.addActionListener(this);
 		btnPlus.setActionCommand("increase_sampling");
 		btnLess.setActionCommand("decrease_sampling");
+		btnMoreCutoff.setActionCommand("increase_cutoff");
+		btnLessCutoff.setActionCommand("decrease_cutoff");
 		
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setAutoCreateGaps(true);
+		
+		// Horizontal
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(btnPrevA, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnNextA, GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
-							.addGap(18))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(graphALayout, GroupLayout.PREFERRED_SIZE, 362,  GroupLayout.PREFERRED_SIZE)
-							.addGap(22)))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnPrevB, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-							.addGap(18)
-							.addComponent(btnNextB, GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE)
-							.addGap(18))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(graphBLayout, GroupLayout.PREFERRED_SIZE, 362, GroupLayout.PREFERRED_SIZE)
-							.addGap(22)))
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnPlus, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnLess, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+				gl_contentPane.createSequentialGroup()
+						
+					// Graph A, Boutons
+					.addGroup(gl_contentPane.createParallelGroup()
+						.addComponent(graphALayout)
+						.addGroup(gl_contentPane.createSequentialGroup().addComponent(btnPrevA).addComponent(btnNextA))
+					)
+							
+					// Graph B, Boutons
+					.addGroup(gl_contentPane.createParallelGroup()
+						.addComponent(graphBLayout)
+						.addGroup(gl_contentPane.createSequentialGroup().addComponent(btnPrevB).addComponent(btnNextB))
+					)
+							
+					// Boutons + / -
+					.addGroup(gl_contentPane.createParallelGroup()
+						.addComponent(btnPlus)
+						.addComponent(btnLess)
+						.addComponent(btnMoreCutoff)
+						.addComponent(btnLessCutoff)
+					)
 		);
+		
+		// Vertical
 		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				gl_contentPane.createSequentialGroup()
+					
+					// Boutons + / - , Graph A, Graph B
+					.addGroup(gl_contentPane.createParallelGroup()
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(11)
-							.addComponent(btnPlus, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnLess, GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE))
-						.addComponent(graphBLayout, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
-						.addComponent(graphALayout, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))
-					.addGap(24)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(btnPlus)
+								.addComponent(btnLess)
+								.addComponent(btnMoreCutoff)
+								.addComponent(btnLessCutoff)
+								)
+						.addComponent(graphALayout)
+						.addComponent(graphBLayout)
+					)
+					
+					// Boutons prevA, prevB, nextA, nextB
+					.addGroup(gl_contentPane.createParallelGroup()
 						.addComponent(btnPrevA)
 						.addComponent(btnPrevB)
 						.addComponent(btnNextA)
-						.addComponent(btnNextB))
-					.addContainerGap())
+						.addComponent(btnNextB)
+					)
 		);
+		
 		contentPane.setLayout(gl_contentPane);
 	}
 
-	private SGTData readTheData(String file, int subsamplingFactor, int channel) {
+	private SGTData readTheData(String file, int subsamplingFactor, int channel, int cutOff) {
 		BufferedReader in = null;
 		String line = null;
 		int x,y;
@@ -198,6 +222,11 @@ public class GraphWindow extends JFrame implements ActionListener {
 				e.printStackTrace();
 			}
 	    }
+	    Logger.log("parsing " + (i*subsamplingFactor)/1000 + "K samples from " 
+	    		+ dataFreq + "Hz channel " + channel + "'s data => " 
+	    		+ (i*subsamplingFactor)/dataFreq + "s record"
+	    		);
+	    
 	    
 	    double xArr[] = new double[list.size()];
 	    double yArr[] = new double[list.size()];
@@ -209,17 +238,87 @@ public class GraphWindow extends JFrame implements ActionListener {
 	    	yArr[i] = p.y;
 	    	i++;
 	    }
-	    
-	    SimpleLine data = new SimpleLine(xArr, yArr, null);
-	    data.setId(getDataId(file,subsamplingFactor, channel));
+	    SimpleLine data = processSignal(new double[][] {xArr, yArr});
+	    data.setId(getDataId(file,subsamplingFactor, channel, cutOff));
 	    data.setXMetaData(new SGTMetaData("Time", "1000 / " + subsamplingFactor + " Hz", false, false));
 	    data.setYMetaData(new SGTMetaData("Potential", "µV", false, false));
 	    
 		return data;
 	}
 	
-	private String getDataId(String file, int sampling, int channel) {
-		return file + sampling + "_" + channel;
+	private SimpleLine processSignal(double[][] data) {
+		if(cutOff > 0) {
+			data = highAmplitudeCutOff(data, cutOff);
+			data = highAmplitudeCutOff(data, cutOff);
+			data = highAmplitudeCutOff(data, cutOff);
+		}
+	    return new SimpleLine(data[X], data[Y], null);
+	}
+
+	private double[][] highAmplitudeCutOff(double[][] data, double amplThreshold) {
+		double f[] = data[Y];
+		List<Integer> toErease = new ArrayList<Integer>();
+		
+		int xx = 1;
+		while(xx < f.length-2) {
+			int x = xx;
+			//Logger.log("xx=" + xx +  " f[x]=" + f[x] + " f[x+1]=" + f[x+1]);
+			
+			// Ca monte
+			if(f[x+1] > f[x]) {			
+				while((x+1 < f.length-1) && (f[x] < f[x+1] || f[x] == f[x+1])) {x++;}
+				
+				// ça redescend
+				if(f[x+1] < f[x] && Math.abs(f[xx] - f[x]) < amplThreshold) {
+					for(int i=xx; i<=x; i++) {
+						toErease.add(i);
+					}
+				}
+				
+				xx = x+1;
+				continue;
+			} 
+			
+			// Ca descend 
+			else if (f[x+1] < f[x]) {	
+				while((x+1 < f.length-1) &&  (f[x] > f[x+1])) {x++;}
+				
+				// ça remonte
+				if(f[x+1] > f[x] && Math.abs(f[xx] - f[x]) < amplThreshold) {
+					for(int i=xx; i<=x; i++) {
+						toErease.add(i);
+					}
+				}
+				
+				xx = x+1;
+				continue;
+			} 
+			
+			// Ca stagne 
+			else {
+				while((x+1 < f.length-1) && (f[x] == f[x+1])) {x++;}
+				xx = x+1;
+				continue;
+			}
+		}
+		Logger.log(toErease.size() + " samples droped");
+		
+		double[] xArr = new double[data[Y].length - toErease.size()];
+		double[] yArr = new double[data[Y].length - toErease.size()];
+		
+		for(int i=0, ii=0; i<data[Y].length; i++) {
+			if(!toErease.contains(i)) {
+				xArr[ii] = (double) i;
+				yArr[ii] = data[Y][i];
+				ii++;
+			}
+		}
+		
+		return new double[][] { xArr, yArr };
+	}
+
+	private String getDataId(String file, int sampling, int channel, int cutOff) {
+		return file + sampling + "_" + channel + "_" + cutOff;
 	}
 
 	@Override
@@ -245,6 +344,14 @@ public class GraphWindow extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("increase_sampling")) {
 			if(subSampling >= 10) {
 				subSampling /= 10;
+			}
+		} else if (e.getActionCommand().equals("increase_cutoff")) {
+			if(cutOff < 2000) {
+				cutOff += 200;
+			}
+		} else if (e.getActionCommand().equals("decrease_cutoff")) {
+			if(cutOff >= 200) {
+				cutOff -= 200;
 			}
 		}
 		updateGraphs();
