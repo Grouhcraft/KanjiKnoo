@@ -13,7 +13,6 @@ import tools.Logger;
 import tools.Pair;
 
 import core.Kanji;
-import core.MainWindow;
 import core.XMLDictionaryParser;
 
 

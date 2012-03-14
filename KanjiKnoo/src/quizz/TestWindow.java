@@ -11,6 +11,8 @@ import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontFormatException;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPanel;
 import java.awt.FlowLayout;
@@ -37,6 +39,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class TestWindow implements AnswerChoosenEventListener {	
 	private JLabel lastKanjiLabel;
@@ -108,7 +112,26 @@ public class TestWindow implements AnswerChoosenEventListener {
 		proposedKunReading.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		// Set Fonts
-		proposedKanji.setFont(new Font("Meiryo", Font.PLAIN, 70));
+		Font font = null;
+		try {
+			 font = java.awt.Font.createFont(
+					java.awt.Font.TRUETYPE_FONT, 
+					new java.io.File(TestWindow.class.getResource("/ressources/KozMinPr6N-Regular-AlphaNum.ttf").toURI())
+					);
+			 font = font.deriveFont(85.0F);
+		} catch (FontFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (URISyntaxException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		//proposedKanji.setFont(new Font("Kozuka Mincho Pr6N H", Font.PLAIN, 85));
+		proposedKanji.setFont(font);
 		proposedMeaning.setFont(new Font("Meiryo", Font.PLAIN, 18));
 		proposedOnReading.setFont(new Font("Meiryo", Font.PLAIN, 22));
 		proposedKunReading.setFont(new Font("Meiryo", Font.PLAIN, 22));

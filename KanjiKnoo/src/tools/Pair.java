@@ -34,9 +34,11 @@ public class Pair<L, R> {
 				&& this.right.equals(pairo.getRight());
 	}
 
+	@SuppressWarnings("unchecked")
 	public void setRight(Object o) {
 		this.right = (R) o;
 	}
+	@SuppressWarnings("unchecked")
 	public void setLeft(Object o) {
 		this.left = (L) o;
 	}
